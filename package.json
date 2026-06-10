@@ -1,0 +1,24 @@
+{
+  "name": "animus-portfolio",
+  "version": "0.1.0",
+  "description": "Sanitized public portfolio version of Animus - Multi-agent AI orchestration platform with CLI and hierarchical agents.",
+  "main": "dist/cli.js",
+  "scripts": {
+    "build": "tsc",
+    "demo": "ts-node src/cli.ts demo",
+    "start": "ts-node src/cli.ts",
+    "dev": "ts-node --watch src/cli.ts"
+  },
+  "keywords": ["ai", "agents", "multi-agent", "cli", "orchestration", "portfolio"],
+  "author": "Nicholas Beighley",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.0"
+  }
+}

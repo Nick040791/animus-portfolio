@@ -4,6 +4,14 @@
 
 > This is a cleaned portfolio edition. The full internal version includes production multi-tenant features, advanced agent squads, and proprietary workflows.
 
+## Screenshots
+
+### `animus demo` — built-in sample task
+![Animus demo](assets/demo-1.png)
+
+### `animus run "<custom task>"` — your own task through the pipeline
+![Animus custom run](assets/demo-2.png)
+
 ## Overview
 
 Animus demonstrates reliable agentic systems with:

@@ -50,22 +50,21 @@ export async function runExecutor(task: Task, plan: string): Promise<AgentRespon
     let searchResult = 'No tool available';
     if (tool) {
       try {
-        searchResult = tool.execute({ query: task.description });
+        searchResult = await tool.execute({ query: task.description });
       } catch (toolError) {
         console.error(chalk.red(`[Tool Error] web_search failed: ${toolError}`));
         searchResult = 'Tool execution failed. Using fallback data.';
       }
     }
     const summaryTool = getTool('summarize');
-    const summary = summaryTool 
-      ? summaryTool.execute({ text: searchResult + ' ' + plan, maxLength: 300 })
+    const summary = summaryTool
+      ? await summaryTool.execute({ text: searchResult + ' ' + plan, maxLength: 300 })
       : plan;
     return {
       agent: 'Executor',
       reasoning: 'Used web_search and summarize tools to gather and condense information.',
       output: summary,
-      confidence: 0.88,
-      toolCalls: tool ? [{ tool: 'web_search', args: { query: task.description } }] : []
+      confidence: 0.88
     };
   } catch (error) {
     console.error(chalk.red(`[Executor Error] ${error}`));

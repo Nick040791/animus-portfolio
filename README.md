@@ -4,14 +4,6 @@
 
 > This is a cleaned portfolio edition. The full internal version includes production multi-tenant features, advanced agent squads, and proprietary workflows.
 
-## Screenshots
-
-### `animus demo` — built-in sample task
-![Animus demo](assets/demo-1.png)
-
-### `animus run "<custom task>"` — your own task through the pipeline
-![Animus custom run](assets/demo-2.png)
-
 ## Overview
 
 Animus demonstrates reliable agentic systems with:
@@ -117,18 +109,6 @@ Safety Review: ...
 === FINAL OUTPUT (after self-correction) ===
 ...
 ```
-
-## Screenshots & Visual Demo
-
-For the best experience, run `npm run demo` in your terminal to see the full colored output and ASCII banner.
-
-**Recommended**: Capture your own screenshots of the demo running and add them to a `assets/` folder for the README.
-
-Example placeholder for a terminal screenshot:
-
-![Animus Demo](https://via.placeholder.com/800x400?text=Animus+CLI+Demo+Screenshot)
-
-(Replace with actual screenshot showing colored [PLANNER], [EXECUTOR], [SAFETY] steps and final output.)
 
 ## Project Structure
 

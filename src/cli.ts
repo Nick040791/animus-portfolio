@@ -28,52 +28,70 @@ program
   .command('demo')
   .description('Run the built-in sample task through full agent pipeline')
   .action(async () => {
-    printBanner();
-    const sampleTask = 'Research and summarize best practices for local AI inference and multi-agent systems for small businesses in Kansas City.';
-    await orchestrateTask(sampleTask);
-    console.log(chalk.gray('\nDemo complete. Try "animus run <your task>" or interactive mode.'));
+    try {
+      printBanner();
+      const sampleTask = 'Research and summarize best practices for local AI inference and multi-agent systems for small businesses in Kansas City.';
+      await orchestrateTask(sampleTask);
+      console.log(chalk.gray('\nDemo complete. Try "animus run <your task>" or interactive mode.'));
+    } catch (error) {
+      console.error(chalk.red(`Demo failed: ${error}`));
+    }
   });
 
 program
   .command('run <task...>')
   .description('Run orchestration on a custom task description')
   .action(async (taskParts: string[]) => {
-    printBanner();
-    const task = taskParts.join(' ');
-    if (!task) {
-      console.log(chalk.red('Please provide a task description.'));
-      return;
+    try {
+      printBanner();
+      const task = taskParts.join(' ');
+      if (!task || task.trim().length === 0) {
+        console.log(chalk.red('Please provide a non-empty task description.'));
+        return;
+      }
+      await orchestrateTask(task);
+    } catch (error) {
+      console.error(chalk.red(`Run command failed: ${error}`));
     }
-    await orchestrateTask(task);
   });
 
 program
   .command('interactive')
   .description('Start interactive mode for multiple tasks')
   .action(async () => {
-    printBanner();
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout
-    });
-
-    console.log(chalk.yellow('Interactive mode. Type your task or "exit" to quit.\n'));
-
-    const ask = () => {
-      rl.question(chalk.bold('Task> '), async (input) => {
-        if (input.toLowerCase() === 'exit' || input.toLowerCase() === 'quit') {
-          rl.close();
-          console.log(chalk.gray('Goodbye!'));
-          return;
-        }
-        if (input.trim()) {
-          await orchestrateTask(input.trim());
-        }
-        ask();
+    try {
+      printBanner();
+      const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
       });
-    };
 
-    ask();
+      console.log(chalk.yellow('Interactive mode. Type your task or "exit" to quit.\n'));
+
+      const ask = () => {
+        rl.question(chalk.bold('Task> '), async (input) => {
+          try {
+            if (input.toLowerCase() === 'exit' || input.toLowerCase() === 'quit') {
+              rl.close();
+              console.log(chalk.gray('Goodbye!'));
+              return;
+            }
+            if (input.trim()) {
+              await orchestrateTask(input.trim());
+            } else {
+              console.log(chalk.yellow('Please enter a task description.'));
+            }
+          } catch (error) {
+            console.error(chalk.red(`Error processing task: ${error}`));
+          }
+          ask();
+        });
+      };
+
+      ask();
+    } catch (error) {
+      console.error(chalk.red(`Interactive mode failed to start: ${error}`));
+    }
   });
 
 // Default action if no command

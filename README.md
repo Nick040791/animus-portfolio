@@ -43,10 +43,42 @@ npm run test:watch # Watch mode
 npm run test:coverage # With coverage report
 ```
 
-### With Real LLM Backend (Optional)
+## Using Real LLMs (Ollama, etc.)
 
-1. Install and run Ollama: `ollama serve` and pull a model e.g. `ollama pull qwen2.5`
-2. The architecture is designed for easy swapping of the LLM simulation in `src/agents.ts` with real calls.
+The current demo uses **simulated responses** so it works out of the box with zero dependencies. However, the architecture is intentionally designed to make it easy to swap in real local or remote LLMs.
+
+### How to integrate Ollama
+
+1. Install and run Ollama: `ollama serve`
+2. Pull a model, e.g.:
+   ```bash
+   ollama pull qwen2.5
+   ollama pull llama3.2
+   ```
+3. Edit `src/agents.ts` and replace the `simulateLLM()` function (or the individual agent functions) with real calls to Ollama's API.
+
+**Example replacement** (inside `src/agents.ts`):
+
+```ts
+async function callOllama(prompt: string, system = '') {
+  const baseUrl = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
+  const model = process.env.OLLAMA_MODEL || 'qwen2.5';
+
+  const res = await fetch(`${baseUrl}/api/generate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model, prompt: system + '\n' + prompt, stream: false })
+  });
+
+  if (!res.ok) throw new Error(`Ollama error: ${res.status}`);
+  const data = await res.json();
+  return data.response || 'No response from model';
+}
+```
+
+Then update `runPlanner`, `runExecutor`, and `runSafety` to call `callOllama(...)` instead of `simulateLLM(...)`.
+
+The project is structured so this change is localized and low-risk. Error handling already exists to fall back gracefully if needed.
 
 ## Architecture
 
@@ -147,7 +179,7 @@ animus-portfolio/
 
 ## Extending
 
-- Add real LLM integration (e.g., Ollama or OpenAI-compatible client) in `src/agents.ts`
+- Add real LLM integration (Ollama, OpenAI-compatible, etc.)
 - Register new tools in `src/tools.ts`
 - Create new specialized agents
 - Add memory/RAG or persistent state

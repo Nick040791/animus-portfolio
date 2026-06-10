@@ -10,7 +10,9 @@
     "dev": "ts-node --watch src/cli.ts",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src tests --ext .ts,.js",
+    "lint:fix": "eslint src tests --ext .ts,.js --fix"
   },
   "keywords": ["ai", "agents", "multi-agent", "cli", "orchestration", "portfolio"],
   "author": "Nicholas Beighley",
@@ -21,6 +23,9 @@
   },
   "devDependencies": {
     "@types/node": "^20.14.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.0",
     "vitest": "^1.6.0"
